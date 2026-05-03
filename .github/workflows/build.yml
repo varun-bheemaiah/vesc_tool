@@ -5,43 +5,10 @@ on:
 
 env:
   QT_VERSION: '5.15.2'
-  QT_MODULES: 'qtgamepad qtserialport qtconnectivity qtpositioning'
+  QT_MODULES: 'qtgamepad'
   QMAKE_FLAGS: 'CONFIG+=release CONFIG+=build_original CONFIG+=exclude_fw'
 
 jobs:
-  # ===== macOS =====
-  build-macos:
-    runs-on: macos-13
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Install Qt
-        uses: jurplel/install-qt-action@v3
-        with:
-          version: ${{ env.QT_VERSION }}
-          host: 'mac'
-          target: 'desktop'
-          arch: 'clang_64'
-          modules: ${{ env.QT_MODULES }}
-
-      - name: Build
-        run: |
-          qmake vesc_tool.pro $QMAKE_FLAGS CONFIG+=release_macos CONFIG+=sdk_no_version_check
-          make -j$(sysctl -n hw.ncpu)
-
-      - name: Bundle
-        run: |
-          APP_PATH=$(find build -name 'ExiTool.app' -type d | head -1)
-          echo "App at: $APP_PATH"
-          macdeployqt "$APP_PATH" -qmldir=mobile -qmldir=res/qml -dmg
-          mkdir -p dist
-          cp "${APP_PATH%/*}"/ExiTool.dmg dist/ExiTool-macOS.dmg
-
-      - uses: actions/upload-artifact@v4
-        with:
-          name: ExiTool-macOS
-          path: dist/ExiTool-macOS.dmg
-
   # ===== Windows =====
   build-windows:
     runs-on: windows-2022
@@ -96,7 +63,7 @@ jobs:
           sudo apt-get install -y \
             build-essential libgl1-mesa-dev libxkbcommon-dev \
             libssl-dev libxcb-xinerama0 libfuse2 \
-            libdbus-1-dev libudev-dev
+            libdbus-1-dev libudev-dev imagemagick
 
       - name: Install Qt
         uses: jurplel/install-qt-action@v3
@@ -136,15 +103,10 @@ jobs:
           Terminal=false
           EOF
 
-          if [ -f res/icon.svg ]; then
-            cp res/icon.svg AppDir/usr/share/icons/hicolor/256x256/apps/exitool.svg || true
-          fi
           if [ -f res/logo_vertical.png ]; then
             cp res/logo_vertical.png AppDir/usr/share/icons/hicolor/256x256/apps/exitool.png
           else
-            convert -size 256x256 xc:'#0A1226' AppDir/usr/share/icons/hicolor/256x256/apps/exitool.png 2>/dev/null \
-              || cp /usr/share/pixmaps/debian-logo.png AppDir/usr/share/icons/hicolor/256x256/apps/exitool.png 2>/dev/null \
-              || touch AppDir/usr/share/icons/hicolor/256x256/apps/exitool.png
+            convert -size 256x256 xc:'#0A1226' AppDir/usr/share/icons/hicolor/256x256/apps/exitool.png
           fi
 
           ./linuxdeployqt.AppImage AppDir/usr/share/applications/exitool.desktop \
@@ -159,4 +121,3 @@ jobs:
         with:
           name: ExiTool-Linux
           path: dist/ExiTool-Linux-x86_64.AppImage
-
