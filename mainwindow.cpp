@@ -1344,13 +1344,14 @@ void MainWindow::addPageItem(QString name, QString icon, QString groupIcon, bool
 {
     QFontMetrics fm(this->font());
     int width = fm.horizontalAdvance("Welcome & Wizards++++++++++");
-    int height = fm.height();
+    int iconH = int(fm.height() * 1.3);
+    int rowH = qMax(iconH, fm.height()) + 12 + 8;
     QListWidgetItem *item = new QListWidgetItem();
-    item->setSizeHint(QSize(width,height));
     ui->pageList->addItem(item);
     PageListItem *li = new PageListItem(name, icon, groupIcon, this);
     li->setBold(bold);
     li->setIndented(indented);
+    item->setSizeHint(QSize(width, rowH));
     ui->pageList->setItemWidget(item, li);
 }
 
@@ -1461,56 +1462,56 @@ void MainWindow::reloadPages()
     mPageMotor->setVesc(mVesc);
     ui->pageWidget->addWidget(mPageMotor);
     addPageItem(tr("General"),  theme + "icons/Horizontal Settings Mixer-96.png",
-                theme + "icons/mcconf.png", false, true);
+                "MOTOR", false, true);
     mPageNameIdList.insert("motor_general", ui->pageList->count() - 1);
 
     mPageBldc = new PageBldc(this);
     mPageBldc->setVesc(mVesc);
     ui->pageWidget->addWidget(mPageBldc);
     addPageItem(tr("BLDC"),  theme + "icons/bldc.png",
-                theme + "icons/mcconf.png", false, true);
+                "MOTOR", false, true);
     mPageNameIdList.insert("motor_bldc", ui->pageList->count() - 1);
 
     mPageDc = new PageDc(this);
     mPageDc->setVesc(mVesc);
     ui->pageWidget->addWidget(mPageDc);
     addPageItem(tr("DC"),  theme + "icons/Car Battery-96.png",
-                theme + "icons/mcconf.png", false, true);
+                "MOTOR", false, true);
     mPageNameIdList.insert("motor_dc", ui->pageList->count() - 1);
 
     mPageFoc = new PageFoc(this);
     mPageFoc->setVesc(mVesc);
     ui->pageWidget->addWidget(mPageFoc);
     addPageItem(tr("FOC"),  theme + "icons/3ph_sine.png",
-                theme + "icons/mcconf.png", false, true);
+                "MOTOR", false, true);
     mPageNameIdList.insert("motor_foc", ui->pageList->count() - 1);
 
     mPageGpd = new PageGPD(this);
     mPageGpd->setVesc(mVesc);
     ui->pageWidget->addWidget(mPageGpd);
     addPageItem(tr("GPDrive"),  theme + "icons/3ph_sine.png",
-                theme + "icons/mcconf.png", false, true);
+                "MOTOR", false, true);
     mPageNameIdList.insert("motor_gpdrive", ui->pageList->count() - 1);
 
     mPageControllers = new PageControllers(this);
     mPageControllers->setVesc(mVesc);
     ui->pageWidget->addWidget(mPageControllers);
     addPageItem(tr("PID Controllers"),  theme + "icons/Speed-96.png",
-                theme + "icons/mcconf.png", false, true);
+                "MOTOR", false, true);
     mPageNameIdList.insert("motor_pid", ui->pageList->count() - 1);
 
     mPageMotorInfo = new PageMotorInfo(this);
     mPageMotorInfo->setVesc(mVesc);
     ui->pageWidget->addWidget(mPageMotorInfo);
     addPageItem(tr("Additional Info"),  theme + "icons/About-96.png",
-                theme + "icons/mcconf.png", false, true);
+                "MOTOR", false, true);
     mPageNameIdList.insert("motor_additional_info", ui->pageList->count() - 1);
 
     mPageExperiments = new PageExperiments(this);
     mPageExperiments->setVesc(mVesc);
     ui->pageWidget->addWidget(mPageExperiments);
     addPageItem(tr("Experiments"),  theme + "icons/Calculator-96.png",
-                theme + "icons/mcconf.png", false, true);
+                "MOTOR", false, true);
     mPageNameIdList.insert("motor_experiments", ui->pageList->count() - 1);
 
     mPageAppSettings = new PageAppSettings(this);
@@ -1523,56 +1524,56 @@ void MainWindow::reloadPages()
     mPageAppGeneral->setVesc(mVesc);
     ui->pageWidget->addWidget(mPageAppGeneral);
     addPageItem(tr("General"),  theme + "icons/Horizontal Settings Mixer-96.png",
-                theme + "icons/appconf.png", false, true);
+                "APP", false, true);
     mPageNameIdList.insert("app_general", ui->pageList->count() - 1);
 
     mPageAppPpm = new PageAppPpm(this);
     mPageAppPpm->setVesc(mVesc);
     ui->pageWidget->addWidget(mPageAppPpm);
     addPageItem(tr("PPM"),  theme + "icons/Controller-96.png",
-                theme + "icons/appconf.png", false, true);
+                "APP", false, true);
     mPageNameIdList.insert("app_ppm", ui->pageList->count() - 1);
 
     mPageAppAdc = new PageAppAdc(this);
     mPageAppAdc->setVesc(mVesc);
     ui->pageWidget->addWidget(mPageAppAdc);
     addPageItem(tr("ADC"),  theme + "icons/Potentiometer-96.png",
-                theme + "icons/appconf.png", false, true);
+                "APP", false, true);
     mPageNameIdList.insert("app_adc", ui->pageList->count() - 1);
 
     mPageAppUart = new PageAppUart(this);
     mPageAppUart->setVesc(mVesc);
     ui->pageWidget->addWidget(mPageAppUart);
     addPageItem(tr("UART"),  theme + "icons/Rs 232 Male-96.png",
-                theme + "icons/appconf.png", false, true);
+                "APP", false, true);
     mPageNameIdList.insert("app_uart", ui->pageList->count() - 1);
 
     mPageAppNunchuk = new PageAppNunchuk(this);
     mPageAppNunchuk->setVesc(mVesc);
     ui->pageWidget->addWidget(mPageAppNunchuk);
     addPageItem(tr("Remote"),  theme + "icons/icons8-fantasy-96.png",
-                theme + "icons/appconf.png", false, true);
+                "APP", false, true);
     mPageNameIdList.insert("app_vescremote", ui->pageList->count() - 1);
 
     mPageAppNrf = new PageAppNrf(this);
     mPageAppNrf->setVesc(mVesc);
     ui->pageWidget->addWidget(mPageAppNrf);
     addPageItem(tr("Nrf"),  theme + "icons/Online-96.png",
-                theme + "icons/appconf.png", false, true);
+                "APP", false, true);
     mPageNameIdList.insert("app_nrf", ui->pageList->count() - 1);
 
     mPageAppPas = new PageAppPas(this);
     mPageAppPas->setVesc(mVesc);
     ui->pageWidget->addWidget(mPageAppPas);
     addPageItem(tr("PAS"),  theme + "icons/icons8-fantasy-96.png",
-                theme + "icons/appconf.png", false, true);
+                "APP", false, true);
     mPageNameIdList.insert("app_pas", ui->pageList->count() - 1);
 
     mPageAppImu = new PageAppImu(this);
     mPageAppImu->setVesc(mVesc);
     ui->pageWidget->addWidget(mPageAppImu);
     addPageItem(tr("IMU"),  theme + "icons/Gyroscope-96.png",
-                theme + "icons/appconf.png", false, true);
+                "APP", false, true);
     mPageNameIdList.insert("app_imu", ui->pageList->count() - 1);
 
     mPageCustomConfig0 = new PageCustomConfig(this);
@@ -1725,7 +1726,7 @@ void MainWindow::reloadPages()
     // Adjust sizes
     QFontMetrics fm(this->font());
     int width = fm.horizontalAdvance("Welcome & Wizards++++++++++++");
-    int height = fm.height()*1.25;
+    int height = qMax(int(fm.height() * 1.3), fm.height()) + 12 + 8;
 
     for(int i = 0; i < ui->pageList->count(); i++) {
         QListWidgetItem *item = ui->pageList->item(i);

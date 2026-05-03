@@ -19,6 +19,7 @@
 
 #include "pagelistitem.h"
 #include <QHBoxLayout>
+#include <QStyle>
 
 PageListItem::PageListItem(QString name,
                            QString icon,
@@ -31,21 +32,21 @@ PageListItem::PageListItem(QString name,
     mSpaceStart = new QSpacerItem(6, 0);
 
     mIconLabel->setScaledContents(true);
-    mGroupLabel->setScaledContents(true);
+    mGroupLabel->setObjectName("groupChip");
 
     setName(name);
     setIcon(icon);
-    setGroupIcon(groupIcon);
+    setGroupChip(groupIcon);
 
     QHBoxLayout *layout = new QHBoxLayout;
-    layout->setMargin(0);
+    layout->setContentsMargins(10, 6, 10, 6);
+    layout->setSpacing(8);
 
     layout->addSpacerItem(mSpaceStart);
     layout->addWidget(mIconLabel);
     layout->addWidget(mNameLabel);
     layout->addStretch();
     layout->addWidget(mGroupLabel);
-    layout->addSpacing(2);
 
     this->setLayout(layout);
 }
@@ -61,7 +62,7 @@ void PageListItem::setIcon(const QString &path)
         mIconLabel->setPixmap(QPixmap(path));
 
         QFontMetrics fm(this->font());
-        int height = fm.height() * 1.1;
+        int height = fm.height() * 1.3;
 
         mIconLabel->setFixedSize(height, height);
     } else {
@@ -71,18 +72,22 @@ void PageListItem::setIcon(const QString &path)
 
 void PageListItem::setGroupIcon(const QString &path)
 {
-    if (!path.isEmpty()) {
-        QPixmap pix(path);
-        mGroupLabel->setPixmap(pix);
-
-        QFontMetrics fm(this->font());
-        int height = fm.height();
-
-        mGroupLabel->setFixedSize((height * pix.width()) / pix.height(), height);
+    // Legacy raster API kept for source compat; route to chip if input
+    // is a plain token (no slash), otherwise hide the badge.
+    if (!path.isEmpty() && !path.contains('/') && !path.contains('\\')) {
+        setGroupChip(path);
     } else {
-        mSpaceStart->changeSize(2, 0);
-        mGroupLabel->setPixmap(QPixmap());
+        setGroupChip(QString());
     }
+}
+
+void PageListItem::setGroupChip(const QString &text)
+{
+    mGroupLabel->setText(text);
+    mGroupLabel->setProperty("chip", text.toLower());
+    mGroupLabel->style()->unpolish(mGroupLabel);
+    mGroupLabel->style()->polish(mGroupLabel);
+    mGroupLabel->setVisible(!text.isEmpty());
 }
 
 QString PageListItem::name()
@@ -99,5 +104,5 @@ void PageListItem::setBold(bool bold)
 
 void PageListItem::setIndented(bool indented)
 {
-    mSpaceStart->changeSize(indented ? 15 : 2, 0);
+    mSpaceStart->changeSize(indented ? 18 : 2, 0);
 }

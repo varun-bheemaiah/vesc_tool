@@ -25,24 +25,24 @@
   <widget class="QWidget" name="centralWidget">
    <layout class="QVBoxLayout" name="verticalLayout_3">
     <property name="spacing">
-     <number>4</number>
+     <number>8</number>
     </property>
     <property name="leftMargin">
-     <number>6</number>
+     <number>12</number>
     </property>
     <property name="topMargin">
-     <number>6</number>
+     <number>12</number>
     </property>
     <property name="rightMargin">
-     <number>6</number>
+     <number>12</number>
     </property>
     <property name="bottomMargin">
-     <number>6</number>
+     <number>12</number>
     </property>
     <item>
      <layout class="QHBoxLayout" name="horizontalLayout">
       <property name="spacing">
-       <number>4</number>
+       <number>12</number>
       </property>
       <item>
        <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -131,10 +131,22 @@
           <widget class="QWidget" name="layoutWidget">
            <layout class="QVBoxLayout" name="verticalLayout">
             <property name="spacing">
-             <number>2</number>
+             <number>8</number>
+            </property>
+            <property name="leftMargin">
+             <number>0</number>
+            </property>
+            <property name="topMargin">
+             <number>12</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
+             <number>4</number>
             </property>
             <item>
-             <widget class="QLabel" name="label">
+             <widget class="QLabel" name="canHeader">
               <property name="font">
                <font>
                 <family>Roboto</family>
@@ -142,7 +154,7 @@
                </font>
               </property>
               <property name="text">
-               <string>CAN-Devices</string>
+               <string>CAN-DEVICES</string>
               </property>
               <property name="alignment">
                <set>Qt::AlignmentFlag::AlignCenter</set>
@@ -211,8 +223,23 @@
     </item>
     <item>
      <layout class="QGridLayout" name="gridLayout_3">
-      <property name="spacing">
-       <number>2</number>
+      <property name="leftMargin">
+       <number>0</number>
+      </property>
+      <property name="topMargin">
+       <number>4</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
+       <number>4</number>
+      </property>
+      <property name="horizontalSpacing">
+       <number>8</number>
+      </property>
+      <property name="verticalSpacing">
+       <number>8</number>
       </property>
       <item row="0" column="8">
        <widget class="DisplayBar" name="dispDuty" native="true">
@@ -224,7 +251,7 @@
         </property>
         <property name="minimumSize">
          <size>
-          <width>150</width>
+          <width>200</width>
           <height>0</height>
          </size>
         </property>
@@ -236,6 +263,12 @@
          <font>
           <family>DejaVu Sans Mono</family>
          </font>
+        </property>
+        <property name="minimumWidth">
+         <number>110</number>
+        </property>
+        <property name="maximumWidth">
+         <number>140</number>
         </property>
         <property name="toolTip">
          <string>Brake current</string>
@@ -363,7 +396,7 @@
         </property>
         <property name="minimumSize">
          <size>
-          <width>150</width>
+          <width>200</width>
           <height>0</height>
          </size>
         </property>
@@ -375,6 +408,12 @@
          <font>
           <family>DejaVu Sans Mono</family>
          </font>
+        </property>
+        <property name="minimumWidth">
+         <number>110</number>
+        </property>
+        <property name="maximumWidth">
+         <number>140</number>
         </property>
         <property name="toolTip">
          <string>Speed</string>
@@ -409,6 +448,12 @@
           <family>DejaVu Sans Mono</family>
          </font>
         </property>
+        <property name="minimumWidth">
+         <number>110</number>
+        </property>
+        <property name="maximumWidth">
+         <number>140</number>
+        </property>
         <property name="toolTip">
          <string>Handbrake current</string>
         </property>
@@ -438,6 +483,12 @@
          <font>
           <family>DejaVu Sans Mono</family>
          </font>
+        </property>
+        <property name="minimumWidth">
+         <number>110</number>
+        </property>
+        <property name="maximumWidth">
+         <number>140</number>
         </property>
         <property name="toolTip">
          <string>Duty cycle</string>
@@ -495,6 +546,12 @@
           <family>DejaVu Sans Mono</family>
          </font>
         </property>
+        <property name="minimumWidth">
+         <number>110</number>
+        </property>
+        <property name="maximumWidth">
+         <number>140</number>
+        </property>
         <property name="toolTip">
          <string>Position</string>
         </property>
@@ -521,6 +578,12 @@
          <font>
           <family>DejaVu Sans Mono</family>
          </font>
+        </property>
+        <property name="minimumWidth">
+         <number>110</number>
+        </property>
+        <property name="maximumWidth">
+         <number>140</number>
         </property>
         <property name="toolTip">
          <string>Current</string>
@@ -561,8 +624,8 @@
    </property>
    <property name="iconSize">
     <size>
-     <width>24</width>
-     <height>24</height>
+     <width>28</width>
+     <height>28</height>
     </size>
    </property>
    <property name="toolButtonStyle">

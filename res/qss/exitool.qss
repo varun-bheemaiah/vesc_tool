@@ -431,15 +431,22 @@ QSplitter::handle:hover {
 QToolBar {
     background-color: @bgSurface;
     border: none;
-    spacing: 4px;
-    padding: 2px;
+    spacing: 6px;
+    padding: 6px 4px;
+}
+
+QToolBar QToolButton {
+    padding: 6px;
+    min-width: 32px;
+    min-height: 32px;
+    border-radius: 4px;
 }
 
 QToolBar::separator {
     background: @border;
     width: 1px;
     height: 1px;
-    margin: 4px;
+    margin: 6px 4px;
 }
 
 /* ===== Dock widgets ===== */
@@ -466,4 +473,70 @@ QScrollArea {
 /* ===== Stacked widget ===== */
 QStackedWidget {
     background-color: @bgDeepest;
+}
+
+/* ===== Page list (left nav) — subtler selection than the global QListView ===== */
+QListWidget#pageList {
+    background-color: transparent;
+    border: none;
+    outline: none;
+}
+
+QListWidget#pageList::item {
+    padding: 0;
+    border: none;
+    color: @textBody;
+}
+
+QListWidget#pageList::item:hover:!selected {
+    background-color: @bgSurface;
+}
+
+QListWidget#pageList::item:selected {
+    background-color: @bgSurface2;
+    color: @textHigh;
+}
+
+/* ===== MOTOR / APP nav badge chips ===== */
+QLabel#groupChip {
+    color: @bgDeepest;
+    background-color: @accentPinkDark;
+    border-radius: 3px;
+    padding: 1px 6px;
+    font-size: 9px;
+    font-weight: bold;
+}
+
+QLabel#groupChip[chip="app"] {
+    background-color: @accentPurple;
+}
+
+/* ===== CAN-Devices section header ===== */
+QLabel#canHeader {
+    color: @textMuted;
+    font-size: 10px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    padding: 4px 0;
+}
+
+/* ===== Quick Configuration cards on Welcome page ===== */
+QPushButton[quickCard="true"] {
+    text-align: left;
+    padding: 12px 18px;
+    background-color: @bgSurface;
+    color: @textHigh;
+    border: 1px solid @border;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+QPushButton[quickCard="true"]:hover {
+    background-color: @bgSurface2;
+    border-color: @accentPink;
+}
+
+QPushButton[quickCard="true"]:pressed {
+    background-color: @bgSurface3;
 }

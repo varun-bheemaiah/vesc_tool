@@ -38,6 +38,7 @@ public:
     void setName(const QString &name);
     void setIcon(const QString &path);
     void setGroupIcon(const QString &path);
+    void setGroupChip(const QString &text);
     QString name();
     void setBold(bool bold);
     void setIndented(bool indented);

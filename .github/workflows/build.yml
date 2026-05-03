@@ -5,7 +5,7 @@ on:
 
 env:
   QT_VERSION: '5.15.2'
-  QMAKE_FLAGS: 'CONFIG+=release CONFIG+=build_original CONFIG+=exclude_fw CONFIG+=no_gamepad'
+  QMAKE_FLAGS: 'CONFIG+=release CONFIG+=build_original CONFIG+=exclude_fw'
 
 jobs:
   # ===== Windows =====
@@ -26,6 +26,13 @@ jobs:
         uses: ilammy/msvc-dev-cmd@v1
         with:
           arch: x64
+
+      - name: Strip gamepad (CI only)
+        shell: pwsh
+        run: |
+          (Get-Content vesc_tool.pro) `
+            -replace '^(\s*)DEFINES \+= HAS_GAMEPAD', '$1# DEFINES += HAS_GAMEPAD (stripped in CI)' `
+            | Set-Content vesc_tool.pro
 
       - name: Build
         shell: cmd
@@ -70,6 +77,9 @@ jobs:
           host: 'linux'
           target: 'desktop'
           arch: 'gcc_64'
+
+      - name: Strip gamepad (CI only)
+        run: sed -i 's|^\(\s*\)DEFINES += HAS_GAMEPAD|\1# DEFINES += HAS_GAMEPAD (stripped in CI)|' vesc_tool.pro
 
       - name: Build
         run: |
