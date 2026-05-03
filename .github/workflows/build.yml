@@ -5,8 +5,7 @@ on:
 
 env:
   QT_VERSION: '5.15.2'
-  QT_MODULES: 'qtgamepad'
-  QMAKE_FLAGS: 'CONFIG+=release CONFIG+=build_original CONFIG+=exclude_fw'
+  QMAKE_FLAGS: 'CONFIG+=release CONFIG+=build_original CONFIG+=exclude_fw CONFIG+=no_gamepad'
 
 jobs:
   # ===== Windows =====
@@ -22,7 +21,6 @@ jobs:
           host: 'windows'
           target: 'desktop'
           arch: 'win64_msvc2019_64'
-          modules: ${{ env.QT_MODULES }}
 
       - name: Setup MSVC
         uses: ilammy/msvc-dev-cmd@v1
@@ -72,7 +70,6 @@ jobs:
           host: 'linux'
           target: 'desktop'
           arch: 'gcc_64'
-          modules: ${{ env.QT_MODULES }}
 
       - name: Build
         run: |
