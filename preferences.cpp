@@ -65,7 +65,6 @@ Preferences::Preferences(QWidget *parent) :
     ui->pollAppDataBox->setValue(mSettings.value("poll_rate_app_data", 20.0).toDouble());
     ui->pollImuDataBox->setValue(mSettings.value("poll_rate_imu_data", 50.0).toDouble());
     ui->pollBmsDataBox->setValue(mSettings.value("poll_rate_bms_data", 10.0).toDouble());
-    ui->darkModeBox->setChecked(Utility::isDarkMode());
     ui->estopTimeBox->setValue(mSettings.value("estop_ms", 5000).toInt());
 
 #ifdef HAS_GAMEPAD
@@ -440,11 +439,6 @@ void Preferences::on_pollRestoreButton_clicked()
     ui->pollAppDataBox->setValue(20.0);
     ui->pollImuDataBox->setValue(50.0);
     ui->pollBmsDataBox->setValue(10.0);
-}
-
-void Preferences::on_darkModeBox_toggled(bool checked)
-{
-    Utility::setDarkMode(checked);
 }
 
 void Preferences::on_okButton_clicked(){

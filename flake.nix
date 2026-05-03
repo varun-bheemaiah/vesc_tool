@@ -1,5 +1,5 @@
 {
-  description = "Packages VESC Tool into a flake.";
+  description = "Packages ExiTool into a flake.";
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-25.05";

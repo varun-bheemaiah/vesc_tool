@@ -48,15 +48,38 @@
 #endif
 
 QMap<QString, QColor> Utility::mAppColors = {
-    {"lightestBackground", QColor(80,80,80)},
-    {"lightBackground", QColor(66,66,66)},
-    {"normalBackground", QColor(48,48,48)},
-    {"darkBackground", QColor(39,39,39)},
-    {"normalText", QColor(180,180,180)},
-    {"lightText", QColor(220,220,220)},
-    {"disabledText", QColor(127,127,127)},
-    {"lightAccent", QColor(129,212,250)},
-    {"darkAccent", QColor(71,117,137)},
+    // Twilight Dark — Exinous brand
+    {"bgDeepest", QColor(10,18,38)},
+    {"bgSurface", QColor(19,29,61)},
+    {"bgSurface2", QColor(30,41,82)},
+    {"bgSurface3", QColor(42,54,102)},
+    {"accentPink", QColor(255,79,138)},
+    {"accentPinkDark", QColor(199,61,110)},
+    {"accentPurple", QColor(177,75,255)},
+    {"accentOrange", QColor(255,138,76)},
+    {"textHigh", QColor(232,236,245)},
+    {"textBody", QColor(184,192,216)},
+    {"textMuted", QColor(122,134,168)},
+    {"textDisabled", QColor(90,100,133)},
+    {"border", QColor(36,48,102)},
+    // Legacy aliases — map to Twilight surfaces
+    {"lightestBackground", QColor(42,54,102)},
+    {"lightBackground", QColor(30,41,82)},
+    {"normalBackground", QColor(19,29,61)},
+    {"darkBackground", QColor(10,18,38)},
+    {"plotBackground", QColor(19,29,61)},
+    {"normalText", QColor(184,192,216)},
+    {"lightText", QColor(232,236,245)},
+    {"disabledText", QColor(90,100,133)},
+    {"lightAccent", QColor(255,79,138)},
+    {"darkAccent", QColor(199,61,110)},
+    {"midAccent", QColor(217,70,128)},
+    {"tertiary1", QColor(255,138,76)},
+    {"tertiary2", QColor(255,79,138)},
+    {"tertiary3", QColor(177,75,255)},
+    {"brightHighlightActive", QColor(255,138,76)},
+    {"brightHighlightInactive", QColor(180,90,55)},
+    // Functional colors — kept for chart/semantic legibility
     {"pink", QColor(219,98,139)},
     {"red", QColor(200,52,52)},
     {"orange", QColor(206,125,44)},
@@ -235,7 +258,7 @@ QString Utility::vescToolChangeLog()
 
 QString Utility::aboutText()
 {
-    return tr("<b>ExiTool %1</b><br>"
+    return tr("<b><span style=\"color:#FF4F8A\">ExiTool</span> %1</b><br>"
           #if VT_IS_TEST_VERSION
               "Test Version %2<br>"
           #endif
@@ -2542,6 +2565,23 @@ QString Utility::getThemePath()
     } else {
         return ":/res/+theme_light/";
     }
+}
+
+QString Utility::loadStyleSheet(QString path)
+{
+    QFile f(path);
+    if (!f.open(QFile::ReadOnly | QFile::Text)) {
+        return QString();
+    }
+    QString qss = QString::fromUtf8(f.readAll());
+    f.close();
+
+    // Replace @tokenName placeholders with hex color values from mAppColors.
+    // Iterate the registered token list so adding new tokens needs no edits here.
+    for (auto it = mAppColors.constBegin(); it != mAppColors.constEnd(); ++it) {
+        qss.replace("@" + it.key(), getAppHexColor(it.key()));
+    }
+    return qss;
 }
 
 QVariantMap Utility::getSafeAreaMargins(QQuickWindow *window)

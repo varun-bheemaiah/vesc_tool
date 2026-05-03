@@ -1,5 +1,6 @@
 <RCC>
     <qresource prefix="/">
+        <file>res/qss/exitool.qss</file>
         <file>res/bg.png</file>
         <file>res/images/rc_rx.jpg</file>
         <file>res/images/ebike_throttle.jpg</file>
