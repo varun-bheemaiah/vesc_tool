@@ -18,8 +18,8 @@ public:
     {
         Q_ASSERT(parent);
 
-        _currentLineColor = QColor(QStringLiteral("#eef067"));
-        _otherLinesColor = QColor(QStringLiteral("#a6a6a6"));
+        _currentLineColor = QColor(QStringLiteral("#FF4F8A"));
+        _otherLinesColor = QColor(QStringLiteral("#7A86A8"));
         setHidden(true);
 
         // We always use fixed font to avoid "width" issues

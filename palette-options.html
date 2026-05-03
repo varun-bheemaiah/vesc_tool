@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>ExiTool Skin — Palette Options</title>
+<style>
+  :root {
+    --ink: #0F1B3D;
+    --paper: #F5F6FA;
+    --paper-2: #ECEEF5;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    line-height: 1.5;
+    padding: 32px;
+  }
+  header {
+    max-width: 1200px;
+    margin: 0 auto 32px;
+  }
+  header h1 {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+  header p {
+    color: #5A6378;
+    font-size: 15px;
+    max-width: 720px;
+  }
+  .gradient-text {
+    background: linear-gradient(90deg, #F26522 0%, #E91E63 50%, #7B2D8E 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .brand-bar {
+    max-width: 1200px;
+    margin: 0 auto 32px;
+    background: white;
+    border-radius: 12px;
+    padding: 20px 24px;
+    box-shadow: 0 1px 3px rgba(15,27,61,0.06), 0 4px 12px rgba(15,27,61,0.04);
+    display: flex;
+    gap: 24px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .brand-bar h2 {
+    font-size: 14px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #5A6378;
+  }
+  .brand-swatches {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .brand-chip {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: #5A6378;
+  }
+  .brand-chip .dot {
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    border: 1px solid rgba(15,27,61,0.08);
+  }
+
+  .grid {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+  @media (min-width: 900px) {
+    .grid { grid-template-columns: 1fr 1fr; }
+  }
+
+  .palette {
+    background: white;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(15,27,61,0.06), 0 8px 24px rgba(15,27,61,0.06);
+  }
+  .palette-head {
+    padding: 20px 24px 16px;
+    border-bottom: 1px solid rgba(15,27,61,0.06);
+  }
+  .palette-name {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #8088A1;
+    margin-bottom: 4px;
+  }
+  .palette-title {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+  .palette-blurb {
+    font-size: 13px;
+    color: #5A6378;
+  }
+
+  .swatch-row {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 0;
+  }
+  .swatch {
+    height: 64px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 6px 8px;
+    font-size: 9px;
+    font-family: "SF Mono", Menlo, Consolas, monospace;
+  }
+  .swatch .label { font-weight: 600; opacity: 0.85; line-height: 1; }
+  .swatch .hex { opacity: 0.7; line-height: 1; margin-top: 2px; }
+
+  .preview {
+    padding: 20px 24px 24px;
+  }
+  .preview-window {
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid rgba(15,27,61,0.08);
+  }
+  .preview-titlebar {
+    height: 28px;
+    display: flex;
+    align-items: center;
+    padding: 0 12px;
+    gap: 6px;
+    font-size: 11px;
+    font-weight: 600;
+  }
+  .traffic { display: flex; gap: 6px; }
+  .traffic span { width: 10px; height: 10px; border-radius: 50%; background: rgba(0,0,0,0.18); }
+  .preview-body {
+    padding: 16px;
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    gap: 14px;
+    min-height: 200px;
+  }
+  .preview-side {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 8px;
+    border-radius: 8px;
+  }
+  .nav-item {
+    padding: 6px 10px;
+    border-radius: 6px;
+    font-size: 12px;
+  }
+  .nav-item.active { font-weight: 600; }
+
+  .preview-main {
+    padding: 12px;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .stat-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 8px;
+  }
+  .stat-card {
+    padding: 8px 10px;
+    border-radius: 6px;
+    font-size: 11px;
+  }
+  .stat-card .stat-label { opacity: 0.7; font-size: 10px; }
+  .stat-card .stat-val { font-size: 16px; font-weight: 700; margin-top: 2px; }
+  .btn-row {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .btn {
+    padding: 7px 14px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+  }
+
+  .progress-track {
+    height: 8px;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    width: 64%;
+  }
+
+  /* ============================================================
+     PALETTE 1 — Navy Pro (recommended for data-heavy IDE)
+     ============================================================ */
+  .p1 .swatch.s1 { background: #0F1B3D; color: #fff; }
+  .p1 .swatch.s2 { background: #1A2654; color: #fff; }
+  .p1 .swatch.s3 { background: #E91E63; color: #fff; }
+  .p1 .swatch.s4 { background: #F5F6FA; color: #0F1B3D; }
+  .p1 .swatch.s5 { background: #ECEEF5; color: #0F1B3D; }
+  .p1 .swatch.s6 { background: #5A6378; color: #fff; }
+
+  .p1 .preview-window { background: #F5F6FA; }
+  .p1 .preview-titlebar { background: #0F1B3D; color: #fff; }
+  .p1 .preview-side { background: #1A2654; }
+  .p1 .preview-side .nav-item { color: #B8C0D8; }
+  .p1 .preview-side .nav-item.active { background: #E91E63; color: #fff; }
+  .p1 .preview-main { background: white; border: 1px solid rgba(15,27,61,0.06); }
+  .p1 .stat-card { background: #F5F6FA; color: #0F1B3D; }
+  .p1 .stat-card .stat-val { color: #E91E63; }
+  .p1 .btn-primary { background: #E91E63; color: #fff; }
+  .p1 .btn-secondary { background: #0F1B3D; color: #fff; }
+  .p1 .btn-ghost { background: transparent; color: #0F1B3D; border: 1px solid #D6DAE5; }
+  .p1 .progress-track { background: #ECEEF5; }
+  .p1 .progress-fill { background: linear-gradient(90deg, #F26522, #E91E63, #7B2D8E); }
+
+  /* ============================================================
+     PALETTE 2 — Gradient Bold (full brand expression)
+     ============================================================ */
+  .p2 .swatch.s1 { background: #F26522; color: #fff; }
+  .p2 .swatch.s2 { background: #E91E63; color: #fff; }
+  .p2 .swatch.s3 { background: #7B2D8E; color: #fff; }
+  .p2 .swatch.s4 { background: #0F1B3D; color: #fff; }
+  .p2 .swatch.s5 { background: #FFF8F0; color: #0F1B3D; }
+  .p2 .swatch.s6 { background: #FAEDF2; color: #7B2D8E; }
+
+  .p2 .preview-window { background: #FFF8F0; }
+  .p2 .preview-titlebar {
+    background: linear-gradient(90deg, #F26522 0%, #E91E63 55%, #7B2D8E 100%);
+    color: #fff;
+  }
+  .p2 .preview-side { background: #0F1B3D; }
+  .p2 .preview-side .nav-item { color: #C0C8DC; }
+  .p2 .preview-side .nav-item.active {
+    background: linear-gradient(90deg, #F26522, #E91E63);
+    color: #fff;
+  }
+  .p2 .preview-main { background: white; border: 1px solid rgba(123,45,142,0.12); }
+  .p2 .stat-card { background: #FAEDF2; color: #0F1B3D; }
+  .p2 .stat-card .stat-val { color: #7B2D8E; }
+  .p2 .btn-primary {
+    background: linear-gradient(90deg, #F26522, #E91E63);
+    color: #fff;
+  }
+  .p2 .btn-secondary { background: #7B2D8E; color: #fff; }
+  .p2 .btn-ghost { background: transparent; color: #E91E63; border: 1px solid #E91E63; }
+  .p2 .progress-track { background: #FAEDF2; }
+  .p2 .progress-fill { background: linear-gradient(90deg, #F26522, #E91E63, #7B2D8E); }
+
+  /* ============================================================
+     PALETTE 3 — Magenta Focus (single accent, clean)
+     ============================================================ */
+  .p3 .swatch.s1 { background: #E91E63; color: #fff; }
+  .p3 .swatch.s2 { background: #C2185B; color: #fff; }
+  .p3 .swatch.s3 { background: #FFFFFF; color: #0F1B3D; border-right: 1px solid rgba(0,0,0,0.06); }
+  .p3 .swatch.s4 { background: #F8F9FB; color: #0F1B3D; }
+  .p3 .swatch.s5 { background: #1F2A4A; color: #fff; }
+  .p3 .swatch.s6 { background: #6E7794; color: #fff; }
+
+  .p3 .preview-window { background: #F8F9FB; }
+  .p3 .preview-titlebar { background: #fff; color: #0F1B3D; border-bottom: 1px solid rgba(15,27,61,0.08); }
+  .p3 .preview-side { background: #fff; border: 1px solid rgba(15,27,61,0.06); }
+  .p3 .preview-side .nav-item { color: #5A6378; }
+  .p3 .preview-side .nav-item.active { background: #FCE4EC; color: #C2185B; }
+  .p3 .preview-main { background: white; border: 1px solid rgba(15,27,61,0.06); }
+  .p3 .stat-card { background: #F8F9FB; color: #0F1B3D; }
+  .p3 .stat-card .stat-val { color: #E91E63; }
+  .p3 .btn-primary { background: #E91E63; color: #fff; }
+  .p3 .btn-secondary { background: #1F2A4A; color: #fff; }
+  .p3 .btn-ghost { background: transparent; color: #E91E63; border: 1px solid #E91E63; }
+  .p3 .progress-track { background: #FCE4EC; }
+  .p3 .progress-fill { background: #E91E63; }
+
+  /* ============================================================
+     PALETTE 4 — Twilight Dark (default-dark IDE, neon accents)
+     ============================================================ */
+  .p4 .swatch.s1 { background: #0A1226; color: #fff; }
+  .p4 .swatch.s2 { background: #131D3D; color: #fff; }
+  .p4 .swatch.s3 { background: #1E2952; color: #fff; }
+  .p4 .swatch.s4 { background: #FF4F8A; color: #fff; }
+  .p4 .swatch.s5 { background: #B14BFF; color: #fff; }
+  .p4 .swatch.s6 { background: #FF8A4C; color: #fff; }
+
+  .p4 .preview-window { background: #0A1226; }
+  .p4 .preview-titlebar { background: #131D3D; color: #fff; border-bottom: 1px solid rgba(255,255,255,0.04); }
+  .p4 .preview-side { background: #131D3D; }
+  .p4 .preview-side .nav-item { color: #8893BF; }
+  .p4 .preview-side .nav-item.active {
+    background: rgba(255,79,138,0.16);
+    color: #FF4F8A;
+    border-left: 2px solid #FF4F8A;
+  }
+  .p4 .preview-main { background: #1E2952; }
+  .p4 .stat-card { background: #131D3D; color: #C0C8DC; }
+  .p4 .stat-card .stat-val { color: #FF4F8A; }
+  .p4 .btn-primary { background: #FF4F8A; color: #fff; }
+  .p4 .btn-secondary { background: #B14BFF; color: #fff; }
+  .p4 .btn-ghost { background: transparent; color: #FF4F8A; border: 1px solid #FF4F8A; }
+  .p4 .progress-track { background: #1E2952; }
+  .p4 .progress-fill { background: linear-gradient(90deg, #FF8A4C, #FF4F8A, #B14BFF); }
+
+  /* ============================================================
+     PALETTE 5 — Sunset Warm (orange-led)
+     ============================================================ */
+  .p5 .swatch.s1 { background: #F26522; color: #fff; }
+  .p5 .swatch.s2 { background: #D94A1F; color: #fff; }
+  .p5 .swatch.s3 { background: #2A1B3D; color: #fff; }
+  .p5 .swatch.s4 { background: #FFFAF5; color: #2A1B3D; }
+  .p5 .swatch.s5 { background: #FFE4D2; color: #D94A1F; }
+  .p5 .swatch.s6 { background: #6B5778; color: #fff; }
+
+  .p5 .preview-window { background: #FFFAF5; }
+  .p5 .preview-titlebar { background: #2A1B3D; color: #fff; }
+  .p5 .preview-side { background: white; border-right: 1px solid rgba(42,27,61,0.08); }
+  .p5 .preview-side .nav-item { color: #6B5778; }
+  .p5 .preview-side .nav-item.active { background: #FFE4D2; color: #D94A1F; font-weight: 600; }
+  .p5 .preview-main { background: white; border: 1px solid rgba(42,27,61,0.08); }
+  .p5 .stat-card { background: #FFFAF5; color: #2A1B3D; border: 1px solid #FFE4D2; }
+  .p5 .stat-card .stat-val { color: #F26522; }
+  .p5 .btn-primary { background: #F26522; color: #fff; }
+  .p5 .btn-secondary { background: #2A1B3D; color: #fff; }
+  .p5 .btn-ghost { background: transparent; color: #F26522; border: 1px solid #F26522; }
+  .p5 .progress-track { background: #FFE4D2; }
+  .p5 .progress-fill { background: linear-gradient(90deg, #F26522, #D94A1F); }
+
+  /* ============================================================
+     PALETTE 6 — Plum Studio (purple-led, premium feel)
+     ============================================================ */
+  .p6 .swatch.s1 { background: #4A1F6E; color: #fff; }
+  .p6 .swatch.s2 { background: #7B2D8E; color: #fff; }
+  .p6 .swatch.s3 { background: #E91E63; color: #fff; }
+  .p6 .swatch.s4 { background: #F7F4FA; color: #4A1F6E; }
+  .p6 .swatch.s5 { background: #EDE3F2; color: #4A1F6E; }
+  .p6 .swatch.s6 { background: #5A6378; color: #fff; }
+
+  .p6 .preview-window { background: #F7F4FA; }
+  .p6 .preview-titlebar { background: #4A1F6E; color: #fff; }
+  .p6 .preview-side { background: #7B2D8E; }
+  .p6 .preview-side .nav-item { color: #E0CCE8; }
+  .p6 .preview-side .nav-item.active { background: #4A1F6E; color: #fff; }
+  .p6 .preview-main { background: white; border: 1px solid rgba(74,31,110,0.08); }
+  .p6 .stat-card { background: #EDE3F2; color: #4A1F6E; }
+  .p6 .stat-card .stat-val { color: #E91E63; }
+  .p6 .btn-primary { background: #7B2D8E; color: #fff; }
+  .p6 .btn-secondary { background: #E91E63; color: #fff; }
+  .p6 .btn-ghost { background: transparent; color: #7B2D8E; border: 1px solid #7B2D8E; }
+  .p6 .progress-track { background: #EDE3F2; }
+  .p6 .progress-fill { background: linear-gradient(90deg, #7B2D8E, #E91E63); }
+
+  footer {
+    max-width: 1200px;
+    margin: 32px auto 0;
+    padding: 24px;
+    text-align: center;
+    color: #8088A1;
+    font-size: 13px;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>ExiTool Skin — <span class="gradient-text">Palette Options</span></h1>
+  <p>Six candidate palettes derived from the Exinous brand (orange &rarr; magenta &rarr; purple gradient + dark navy wordmark). Each shows core swatches and a small UI preview (titlebar, sidebar, content, stats, buttons, progress). Pick one to drive the ExiTool QSS skin.</p>
+</header>
+
+<div class="brand-bar">
+  <h2>Brand Source</h2>
+  <div class="brand-swatches">
+    <div class="brand-chip"><div class="dot" style="background:#F26522"></div>#F26522 orange</div>
+    <div class="brand-chip"><div class="dot" style="background:#E91E63"></div>#E91E63 magenta</div>
+    <div class="brand-chip"><div class="dot" style="background:#7B2D8E"></div>#7B2D8E purple</div>
+    <div class="brand-chip"><div class="dot" style="background:#0F1B3D"></div>#0F1B3D navy</div>
+    <div class="brand-chip"><div class="dot" style="background:linear-gradient(90deg,#F26522,#E91E63,#7B2D8E)"></div>gradient</div>
+  </div>
+</div>
+
+<div class="grid">
+
+  <!-- PALETTE 1 -->
+  <div class="palette p1">
+    <div class="palette-head">
+      <div class="palette-name">Option 1 &middot; Recommended</div>
+      <div class="palette-title">Navy Pro</div>
+      <div class="palette-blurb">Dark navy chrome, magenta accents, light content area. Best for data-dense IDE work — high legibility, brand expressed through accent.</div>
+    </div>
+    <div class="swatch-row">
+      <div class="swatch s1"><div class="label">Primary</div><div class="hex">#0F1B3D</div></div>
+      <div class="swatch s2"><div class="label">Surface</div><div class="hex">#1A2654</div></div>
+      <div class="swatch s3"><div class="label">Accent</div><div class="hex">#E91E63</div></div>
+      <div class="swatch s4"><div class="label">Bg</div><div class="hex">#F5F6FA</div></div>
+      <div class="swatch s5"><div class="label">Bg-2</div><div class="hex">#ECEEF5</div></div>
+      <div class="swatch s6"><div class="label">Muted</div><div class="hex">#5A6378</div></div>
+    </div>
+    <div class="preview">
+      <div class="preview-window">
+        <div class="preview-titlebar">
+          <div class="traffic"><span></span><span></span><span></span></div>
+          <div style="margin-left:auto">ExiTool</div>
+        </div>
+        <div class="preview-body">
+          <div class="preview-side">
+            <div class="nav-item active">Connection</div>
+            <div class="nav-item">Motor Cfg</div>
+            <div class="nav-item">App Cfg</div>
+            <div class="nav-item">Realtime</div>
+          </div>
+          <div class="preview-main">
+            <div class="stat-row">
+              <div class="stat-card"><div class="stat-label">Voltage</div><div class="stat-val">48.2V</div></div>
+              <div class="stat-card"><div class="stat-label">Current</div><div class="stat-val">12.4A</div></div>
+              <div class="stat-card"><div class="stat-label">RPM</div><div class="stat-val">3120</div></div>
+            </div>
+            <div class="progress-track"><div class="progress-fill"></div></div>
+            <div class="btn-row">
+              <button class="btn btn-primary">Connect</button>
+              <button class="btn btn-secondary">Read</button>
+              <button class="btn btn-ghost">Cancel</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PALETTE 2 -->
+  <div class="palette p2">
+    <div class="palette-head">
+      <div class="palette-name">Option 2</div>
+      <div class="palette-title">Gradient Bold</div>
+      <div class="palette-blurb">Full gradient titlebar, navy sidebar, warm cream background. Strongest brand expression — could feel busy in long sessions.</div>
+    </div>
+    <div class="swatch-row">
+      <div class="swatch s1"><div class="label">Orange</div><div class="hex">#F26522</div></div>
+      <div class="swatch s2"><div class="label">Magenta</div><div class="hex">#E91E63</div></div>
+      <div class="swatch s3"><div class="label">Purple</div><div class="hex">#7B2D8E</div></div>
+      <div class="swatch s4"><div class="label">Ink</div><div class="hex">#0F1B3D</div></div>
+      <div class="swatch s5"><div class="label">Cream</div><div class="hex">#FFF8F0</div></div>
+      <div class="swatch s6"><div class="label">Tint</div><div class="hex">#FAEDF2</div></div>
+    </div>
+    <div class="preview">
+      <div class="preview-window">
+        <div class="preview-titlebar">
+          <div class="traffic"><span></span><span></span><span></span></div>
+          <div style="margin-left:auto">ExiTool</div>
+        </div>
+        <div class="preview-body">
+          <div class="preview-side">
+            <div class="nav-item active">Connection</div>
+            <div class="nav-item">Motor Cfg</div>
+            <div class="nav-item">App Cfg</div>
+            <div class="nav-item">Realtime</div>
+          </div>
+          <div class="preview-main">
+            <div class="stat-row">
+              <div class="stat-card"><div class="stat-label">Voltage</div><div class="stat-val">48.2V</div></div>
+              <div class="stat-card"><div class="stat-label">Current</div><div class="stat-val">12.4A</div></div>
+              <div class="stat-card"><div class="stat-label">RPM</div><div class="stat-val">3120</div></div>
+            </div>
+            <div class="progress-track"><div class="progress-fill"></div></div>
+            <div class="btn-row">
+              <button class="btn btn-primary">Connect</button>
+              <button class="btn btn-secondary">Read</button>
+              <button class="btn btn-ghost">Cancel</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PALETTE 3 -->
+  <div class="palette p3">
+    <div class="palette-head">
+      <div class="palette-name">Option 3</div>
+      <div class="palette-title">Magenta Focus</div>
+      <div class="palette-blurb">Light/airy. White chrome with subtle borders, magenta as sole accent, navy ink for headings. Most minimal.</div>
+    </div>
+    <div class="swatch-row">
+      <div class="swatch s1"><div class="label">Accent</div><div class="hex">#E91E63</div></div>
+      <div class="swatch s2"><div class="label">Accent-d</div><div class="hex">#C2185B</div></div>
+      <div class="swatch s3"><div class="label">White</div><div class="hex">#FFFFFF</div></div>
+      <div class="swatch s4"><div class="label">Bg</div><div class="hex">#F8F9FB</div></div>
+      <div class="swatch s5"><div class="label">Ink</div><div class="hex">#1F2A4A</div></div>
+      <div class="swatch s6"><div class="label">Muted</div><div class="hex">#6E7794</div></div>
+    </div>
+    <div class="preview">
+      <div class="preview-window">
+        <div class="preview-titlebar">
+          <div class="traffic"><span></span><span></span><span></span></div>
+          <div style="margin-left:auto">ExiTool</div>
+        </div>
+        <div class="preview-body">
+          <div class="preview-side">
+            <div class="nav-item active">Connection</div>
+            <div class="nav-item">Motor Cfg</div>
+            <div class="nav-item">App Cfg</div>
+            <div class="nav-item">Realtime</div>
+          </div>
+          <div class="preview-main">
+            <div class="stat-row">
+              <div class="stat-card"><div class="stat-label">Voltage</div><div class="stat-val">48.2V</div></div>
+              <div class="stat-card"><div class="stat-label">Current</div><div class="stat-val">12.4A</div></div>
+              <div class="stat-card"><div class="stat-label">RPM</div><div class="stat-val">3120</div></div>
+            </div>
+            <div class="progress-track"><div class="progress-fill"></div></div>
+            <div class="btn-row">
+              <button class="btn btn-primary">Connect</button>
+              <button class="btn btn-secondary">Read</button>
+              <button class="btn btn-ghost">Cancel</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PALETTE 4 -->
+  <div class="palette p4">
+    <div class="palette-head">
+      <div class="palette-name">Option 4</div>
+      <div class="palette-title">Twilight Dark</div>
+      <div class="palette-blurb">Dark-mode-first. Deep navy surfaces, neon pink/orange/purple accents pulled from logo gradient. Easy on eyes, very modern dev tool feel.</div>
+    </div>
+    <div class="swatch-row">
+      <div class="swatch s1"><div class="label">Bg</div><div class="hex">#0A1226</div></div>
+      <div class="swatch s2"><div class="label">Surface</div><div class="hex">#131D3D</div></div>
+      <div class="swatch s3"><div class="label">Surf-2</div><div class="hex">#1E2952</div></div>
+      <div class="swatch s4"><div class="label">Pink</div><div class="hex">#FF4F8A</div></div>
+      <div class="swatch s5"><div class="label">Purple</div><div class="hex">#B14BFF</div></div>
+      <div class="swatch s6"><div class="label">Orange</div><div class="hex">#FF8A4C</div></div>
+    </div>
+    <div class="preview">
+      <div class="preview-window">
+        <div class="preview-titlebar">
+          <div class="traffic"><span></span><span></span><span></span></div>
+          <div style="margin-left:auto">ExiTool</div>
+        </div>
+        <div class="preview-body">
+          <div class="preview-side">
+            <div class="nav-item active">Connection</div>
+            <div class="nav-item">Motor Cfg</div>
+            <div class="nav-item">App Cfg</div>
+            <div class="nav-item">Realtime</div>
+          </div>
+          <div class="preview-main">
+            <div class="stat-row">
+              <div class="stat-card"><div class="stat-label">Voltage</div><div class="stat-val">48.2V</div></div>
+              <div class="stat-card"><div class="stat-label">Current</div><div class="stat-val">12.4A</div></div>
+              <div class="stat-card"><div class="stat-label">RPM</div><div class="stat-val">3120</div></div>
+            </div>
+            <div class="progress-track"><div class="progress-fill"></div></div>
+            <div class="btn-row">
+              <button class="btn btn-primary">Connect</button>
+              <button class="btn btn-secondary">Read</button>
+              <button class="btn btn-ghost">Cancel</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PALETTE 5 -->
+  <div class="palette p5">
+    <div class="palette-head">
+      <div class="palette-name">Option 5</div>
+      <div class="palette-title">Sunset Warm</div>
+      <div class="palette-blurb">Orange primary with deep plum titlebar, warm cream content. Friendly + energetic. Less common feel for an IDE tool.</div>
+    </div>
+    <div class="swatch-row">
+      <div class="swatch s1"><div class="label">Orange</div><div class="hex">#F26522</div></div>
+      <div class="swatch s2"><div class="label">Org-d</div><div class="hex">#D94A1F</div></div>
+      <div class="swatch s3"><div class="label">Plum</div><div class="hex">#2A1B3D</div></div>
+      <div class="swatch s4"><div class="label">Cream</div><div class="hex">#FFFAF5</div></div>
+      <div class="swatch s5"><div class="label">Tint</div><div class="hex">#FFE4D2</div></div>
+      <div class="swatch s6"><div class="label">Muted</div><div class="hex">#6B5778</div></div>
+    </div>
+    <div class="preview">
+      <div class="preview-window">
+        <div class="preview-titlebar">
+          <div class="traffic"><span></span><span></span><span></span></div>
+          <div style="margin-left:auto">ExiTool</div>
+        </div>
+        <div class="preview-body">
+          <div class="preview-side">
+            <div class="nav-item active">Connection</div>
+            <div class="nav-item">Motor Cfg</div>
+            <div class="nav-item">App Cfg</div>
+            <div class="nav-item">Realtime</div>
+          </div>
+          <div class="preview-main">
+            <div class="stat-row">
+              <div class="stat-card"><div class="stat-label">Voltage</div><div class="stat-val">48.2V</div></div>
+              <div class="stat-card"><div class="stat-label">Current</div><div class="stat-val">12.4A</div></div>
+              <div class="stat-card"><div class="stat-label">RPM</div><div class="stat-val">3120</div></div>
+            </div>
+            <div class="progress-track"><div class="progress-fill"></div></div>
+            <div class="btn-row">
+              <button class="btn btn-primary">Connect</button>
+              <button class="btn btn-secondary">Read</button>
+              <button class="btn btn-ghost">Cancel</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PALETTE 6 -->
+  <div class="palette p6">
+    <div class="palette-head">
+      <div class="palette-name">Option 6</div>
+      <div class="palette-title">Plum Studio</div>
+      <div class="palette-blurb">Deep plum chrome, magenta accents, lavender tints. Feels premium, almost editorial. Distinct from typical engineering tools.</div>
+    </div>
+    <div class="swatch-row">
+      <div class="swatch s1"><div class="label">Plum</div><div class="hex">#4A1F6E</div></div>
+      <div class="swatch s2"><div class="label">Purple</div><div class="hex">#7B2D8E</div></div>
+      <div class="swatch s3"><div class="label">Magenta</div><div class="hex">#E91E63</div></div>
+      <div class="swatch s4"><div class="label">Bg</div><div class="hex">#F7F4FA</div></div>
+      <div class="swatch s5"><div class="label">Tint</div><div class="hex">#EDE3F2</div></div>
+      <div class="swatch s6"><div class="label">Muted</div><div class="hex">#5A6378</div></div>
+    </div>
+    <div class="preview">
+      <div class="preview-window">
+        <div class="preview-titlebar">
+          <div class="traffic"><span></span><span></span><span></span></div>
+          <div style="margin-left:auto">ExiTool</div>
+        </div>
+        <div class="preview-body">
+          <div class="preview-side">
+            <div class="nav-item active">Connection</div>
+            <div class="nav-item">Motor Cfg</div>
+            <div class="nav-item">App Cfg</div>
+            <div class="nav-item">Realtime</div>
+          </div>
+          <div class="preview-main">
+            <div class="stat-row">
+              <div class="stat-card"><div class="stat-label">Voltage</div><div class="stat-val">48.2V</div></div>
+              <div class="stat-card"><div class="stat-label">Current</div><div class="stat-val">12.4A</div></div>
+              <div class="stat-card"><div class="stat-label">RPM</div><div class="stat-val">3120</div></div>
+            </div>
+            <div class="progress-track"><div class="progress-fill"></div></div>
+            <div class="btn-row">
+              <button class="btn btn-primary">Connect</button>
+              <button class="btn btn-secondary">Read</button>
+              <button class="btn btn-ghost">Cancel</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  Open <code>palette-options.html</code> in your browser to compare. Pick a number (1&ndash;6) and the skin will be built from that palette.
+</footer>
+
+</body>
+</html>

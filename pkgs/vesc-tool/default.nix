@@ -24,7 +24,7 @@ let
     str:
     (lib.toUpper (builtins.substring 0 1 str)) + (builtins.substring 1 (builtins.stringLength str) str);
   kindTitleCase = firstToUpper kind;
-  executableName = "vesc_tool${if kind == "original" then "" else "_${kind}"}";
+  executableName = "exitool${if kind == "original" then "" else "_${kind}"}";
   iconPath =
     {
       "original" = "res/version/neutral_v.svg";
@@ -47,17 +47,17 @@ stdenv.mkDerivation {
   version = src.shortRev or src.dirtyShortRev or src.rev or src.dirtyRev or "unknown";
 
   meta = with lib; {
-    description = "VESC Tool ${kind}, an IDE for controlling and configuring VESC-compatible motor controllers and other devices.";
+    description = "ExiTool ${kind}, an IDE for controlling and configuring VESC-compatible motor controllers and other devices.";
     platforms = platforms.linux;
   };
 
   desktopItems = [
     (makeDesktopItem {
-      name = "com.vesc-project.";
+      name = "com.exinous.exitool";
       exec = executableName;
-      icon = "vesc_tool_${kind}.svg";
+      icon = "exitool_${kind}.svg";
       comment = "IDE for controlling and configuring VESC-compatible motor controllers and other devices.";
-      desktopName = "VESC Tool ${kindTitleCase}";
+      desktopName = "ExiTool ${kindTitleCase}";
       genericName = "Integrated Development Environment";
       categories = [ "Development" ];
     })
@@ -83,8 +83,8 @@ stdenv.mkDerivation {
       $out/bin \
       $out/share/icons/hicolor/scalable/apps
 
-    cp build/lin/vesc_tool_* $out/bin/${executableName}
-    cp ${iconPath} $out/share/icons/hicolor/scalable/apps/vesc_tool_${kind}.svg
+    cp build/lin/ExiTool_* $out/bin/${executableName}
+    cp ${iconPath} $out/share/icons/hicolor/scalable/apps/exitool_${kind}.svg
     echo $desktopItems
 
     runHook postInstall
