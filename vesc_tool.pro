@@ -84,7 +84,7 @@ DEFINES += HAS_BLUETOOTH
 !android: {
     # Serial port available
     DEFINES += HAS_SERIALPORT
-    !no_gamepad: DEFINES += HAS_GAMEPAD
+    DEFINES += HAS_GAMEPAD
 }
 }
 
