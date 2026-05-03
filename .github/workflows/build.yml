@@ -1,0 +1,162 @@
+name: Build ExiTool
+
+on:
+  workflow_dispatch:
+
+env:
+  QT_VERSION: '5.15.2'
+  QT_MODULES: 'qtgamepad qtserialport qtconnectivity qtpositioning'
+  QMAKE_FLAGS: 'CONFIG+=release CONFIG+=build_original CONFIG+=exclude_fw'
+
+jobs:
+  # ===== macOS =====
+  build-macos:
+    runs-on: macos-13
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v3
+        with:
+          version: ${{ env.QT_VERSION }}
+          host: 'mac'
+          target: 'desktop'
+          arch: 'clang_64'
+          modules: ${{ env.QT_MODULES }}
+
+      - name: Build
+        run: |
+          qmake vesc_tool.pro $QMAKE_FLAGS CONFIG+=release_macos CONFIG+=sdk_no_version_check
+          make -j$(sysctl -n hw.ncpu)
+
+      - name: Bundle
+        run: |
+          APP_PATH=$(find build -name 'ExiTool.app' -type d | head -1)
+          echo "App at: $APP_PATH"
+          macdeployqt "$APP_PATH" -qmldir=mobile -qmldir=res/qml -dmg
+          mkdir -p dist
+          cp "${APP_PATH%/*}"/ExiTool.dmg dist/ExiTool-macOS.dmg
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ExiTool-macOS
+          path: dist/ExiTool-macOS.dmg
+
+  # ===== Windows =====
+  build-windows:
+    runs-on: windows-2022
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v3
+        with:
+          version: ${{ env.QT_VERSION }}
+          host: 'windows'
+          target: 'desktop'
+          arch: 'win64_msvc2019_64'
+          modules: ${{ env.QT_MODULES }}
+
+      - name: Setup MSVC
+        uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: x64
+
+      - name: Build
+        shell: cmd
+        run: |
+          qmake vesc_tool.pro %QMAKE_FLAGS%
+          nmake
+
+      - name: Bundle
+        shell: pwsh
+        run: |
+          $exe = Get-ChildItem -Recurse -Filter 'ExiTool_*.exe' -Path build | Select-Object -First 1
+          if (-not $exe) { throw "Built exe not found" }
+          $bundleDir = "dist\ExiTool-Windows"
+          New-Item -ItemType Directory -Force -Path $bundleDir | Out-Null
+          Copy-Item $exe.FullName $bundleDir
+          windeployqt --release --qmldir mobile --qmldir res\qml "$bundleDir\$($exe.Name)"
+          Compress-Archive -Path "$bundleDir\*" -DestinationPath "dist\ExiTool-Windows.zip"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ExiTool-Windows
+          path: dist/ExiTool-Windows.zip
+
+  # ===== Linux (AppImage) =====
+  build-linux:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install build deps
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            build-essential libgl1-mesa-dev libxkbcommon-dev \
+            libssl-dev libxcb-xinerama0 libfuse2 \
+            libdbus-1-dev libudev-dev
+
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v3
+        with:
+          version: ${{ env.QT_VERSION }}
+          host: 'linux'
+          target: 'desktop'
+          arch: 'gcc_64'
+          modules: ${{ env.QT_MODULES }}
+
+      - name: Build
+        run: |
+          qmake vesc_tool.pro $QMAKE_FLAGS
+          make -j$(nproc)
+
+      - name: Get linuxdeployqt
+        run: |
+          wget -q https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage \
+            -O linuxdeployqt.AppImage
+          chmod +x linuxdeployqt.AppImage
+
+      - name: Bundle AppImage
+        run: |
+          BIN=$(find build -maxdepth 4 -name 'ExiTool_*' -type f -executable | head -1)
+          echo "Binary: $BIN"
+
+          mkdir -p AppDir/usr/bin AppDir/usr/share/applications AppDir/usr/share/icons/hicolor/256x256/apps
+          cp "$BIN" AppDir/usr/bin/ExiTool
+
+          cat > AppDir/usr/share/applications/exitool.desktop <<EOF
+          [Desktop Entry]
+          Type=Application
+          Name=ExiTool
+          Exec=ExiTool
+          Icon=exitool
+          Categories=Utility;
+          Terminal=false
+          EOF
+
+          if [ -f res/icon.svg ]; then
+            cp res/icon.svg AppDir/usr/share/icons/hicolor/256x256/apps/exitool.svg || true
+          fi
+          if [ -f res/logo_vertical.png ]; then
+            cp res/logo_vertical.png AppDir/usr/share/icons/hicolor/256x256/apps/exitool.png
+          else
+            convert -size 256x256 xc:'#0A1226' AppDir/usr/share/icons/hicolor/256x256/apps/exitool.png 2>/dev/null \
+              || cp /usr/share/pixmaps/debian-logo.png AppDir/usr/share/icons/hicolor/256x256/apps/exitool.png 2>/dev/null \
+              || touch AppDir/usr/share/icons/hicolor/256x256/apps/exitool.png
+          fi
+
+          ./linuxdeployqt.AppImage AppDir/usr/share/applications/exitool.desktop \
+            -qmldir=mobile -qmldir=res/qml \
+            -bundle-non-qt-libs -appimage \
+            -extra-plugins=iconengines,imageformats,platformthemes,bearer,sqldrivers
+
+          mkdir -p dist
+          mv ExiTool*.AppImage dist/ExiTool-Linux-x86_64.AppImage
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ExiTool-Linux
+          path: dist/ExiTool-Linux-x86_64.AppImage
+
